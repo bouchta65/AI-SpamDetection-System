@@ -1,0 +1,26 @@
+services:
+  streamlit-app:
+    build: .
+    container_name: streamlit-app
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/src
+      - ./view:/src/view
+      - ./data:/src/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: streamlit run view/app.py --server.port=8501 --server.address=0.0.0.0
+
+  jupyter-app:
+    build: .
+    container_name: jupyter-app
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./src:/src
+      - ./data:/src/data
+      - ./models:/src/models
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
